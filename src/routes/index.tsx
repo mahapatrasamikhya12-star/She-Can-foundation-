@@ -1,49 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+
+// Import components
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
-import { Ticker } from "@/components/site/Ticker";
-import { Impact } from "@/components/site/Impact";
+import { StoryVideo } from "@/components/site/StoryVideo"; // 1. Import your new component
+import { ActionImpact } from "@/components/site/ActionImpact";
 import { Campaigns } from "@/components/site/Campaigns";
+import { CommunityStories } from "@/components/site/CommunityStories";
 import { Programs } from "@/components/site/Programs";
-import { Stories } from "@/components/site/Stories";
-import { Donate } from "@/components/site/Donate";
-import { Events } from "@/components/site/Events";
+import { PromisesSection } from "@/components/site/PromisesSection";
+import { SolveSection } from "@/components/site/SolveSection";
+import { FAQSection } from "@/components/site/FAQSection";
 import { Transparency } from "@/components/site/Transparency";
 import { Contact } from "@/components/site/Contact";
 import { Footer } from "@/components/site/Footer";
+import { Ticker } from "@/components/site/Ticker";
 
 export const Route = createFileRoute("/")({
   component: Index,
-  head: () => ({
-    meta: [
-      { title: "She Can! Foundation — Empowering Every Girl to Rise" },
-      {
-        name: "description",
-        content:
-          "PAN-India NGO affiliated with NITI Aayog. Education, menstrual health, skills and economic empowerment for underprivileged women across India.",
-      },
-      { property: "og:title", content: "She Can! Foundation" },
-      {
-        property: "og:description",
-        content: "Empowering every girl to rise beyond limitations — across India.",
-      },
-    ],
-  }),
 });
 
 function Index() {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="min-h-dvh bg-[#0A0909] text-white overflow-x-hidden">
       <Nav />
       <Hero />
       <Ticker />
-      <Impact />
-      <Campaigns />
+      <SolveSection />
+      {/* 2. Replace the component you want to remove (e.g., Transparency) with StoryVideo */}
+      <StoryVideo /> 
       <Programs />
-      <Stories />
-      <Donate />
-      <Events />
-      <Transparency />
+      <CommunityStories />
+      <PromisesSection />
+      <FAQSection />
       <Contact />
       <Footer />
     </main>

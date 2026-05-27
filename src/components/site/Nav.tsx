@@ -1,90 +1,79 @@
-import { useEffect, useState } from "react";
-import { Menu, X, Heart } from "lucide-react";
-import { ThemeToggle } from "./theme";
-import logo from "@/assets/logo.jpeg";
-
-const links = [
-  { href: "#about", label: "About" },
-  { href: "#campaigns", label: "Campaigns" },
-  { href: "#programs", label: "Programs" },
-  { href: "#stories", label: "Stories" },
-  { href: "#events", label: "Events" },
-  { href: "#contact", label: "Contact" },
-];
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import LOGO_IMG from "@/assets/logo.jpeg";
 
 export function Nav() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const f = () => setScrolled(window.scrollY > 20);
-    f();
-    window.addEventListener("scroll", f);
-    return () => window.removeEventListener("scroll", f);
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navItems = [
+    { name: "About", id: "about" },
+    { name: "Programs", id: "programs" },
+    { name: "Stories", id: "stories" },
+    { name: "Contact", id: "contact" },
+  ];
+
+  // Fail-safe manual scroll handler
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault(); // Stop standard href jump
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    setIsOpen(false); // Close mobile menu if open
+  };
+
   return (
-    <header
-      className={`fixed top-0 z-50 w-full transition-all ${
-        scrolled ? "glass border-b border-border/60" : ""
-      }`}
-    >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 md:py-4">
-        <a href="#top" className="flex items-center gap-3">
-          <img src={logo} alt="She Can Foundation" className="h-11 w-11 rounded-full object-cover ring-2 ring-primary/40" />
-          <div className="leading-tight">
-            <div className="text-sm font-bold tracking-tight">She Can!</div>
-            <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Foundation</div>
+    <nav className="fixed top-0 w-full z-50 bg-[#05070E]/90 backdrop-blur-md border-b border-white/10 shadow-lg">
+      <div className="max-w-7xl mx-auto px-5 h-20 flex items-center justify-between">
+        
+        {/* Brand Logo & Title */}
+        <div 
+          className="flex items-center gap-3 cursor-pointer group"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <div className="h-10 w-10 overflow-hidden rounded-full border border-white/20 bg-white/5">
+            <img src={LOGO_IMG} alt="She Can Logo" className="h-full w-full object-cover" />
           </div>
-        </a>
-        <ul className="hidden items-center gap-7 md:flex">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="text-sm font-medium text-foreground/80 transition hover:text-primary">
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <a
-            href="#donate"
-            className="hidden items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:scale-[1.03] hover:shadow-primary/50 md:inline-flex"
-          >
-            <Heart className="h-4 w-4 fill-current" /> Donate
-          </a>
-          <button
-            aria-label="Menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border md:hidden"
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="text-white font-extrabold text-xl tracking-wider font-serif">
+            SHE CAN
+          </div>
         </div>
-      </nav>
-      {open && (
-        <div className="border-t border-border bg-background md:hidden">
-          <ul className="flex flex-col gap-1 px-5 py-3">
-            {links.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-            <a
-              href="#donate"
-              onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
+        
+        {/* Desktop Menu - Uses explicit handleScroll handler */}
+        <div className="hidden md:flex gap-8 text-xs font-semibold uppercase tracking-wider text-gray-300">
+          {navItems.map((item) => (
+            <a 
+              key={item.name} 
+              href={`#${item.id}`} 
+              onClick={(e) => handleScroll(e, item.id)}
+              className="hover:text-[#D59D82] transition-colors duration-200"
             >
-              <Heart className="h-4 w-4 fill-current" /> Donate Now
+              {item.name}
             </a>
-          </ul>
+          ))}
+        </div>
+
+        {/* Mobile Toggle Button */}
+        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isOpen && (
+        <div className="md:hidden bg-[#05070E] p-5 border-t border-white/10 space-y-1 shadow-2xl">
+          {navItems.map((item) => (
+            <a 
+              key={item.name} 
+              href={`#${item.id}`} 
+              onClick={(e) => handleScroll(e, item.id)}
+              className="block py-4 px-3 text-sm font-medium text-gray-200 hover:text-[#D59D82] hover:bg-white/5 rounded-xl transition-all"
+            >
+              {item.name}
+            </a>
+          ))}
         </div>
       )}
-    </header>
+    </nav>
   );
 }

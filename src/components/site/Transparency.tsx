@@ -1,47 +1,71 @@
 import { motion } from "framer-motion";
-import { ShieldCheck, FileText, Award, BadgeCheck } from "lucide-react";
+import { ShieldCheck, FileText, Award, BadgeCheck, Download, ArrowUpRight } from "lucide-react";
 
 const items = [
-  { icon: ShieldCheck, t: "NITI Aayog Verified", d: "Registered on NGO Darpan portal" },
-  { icon: Award, t: "80G & 12A Certified", d: "Tax-exempt donations in India" },
-  { icon: FileText, t: "Annual Reports", d: "Audited financials published yearly" },
-  { icon: BadgeCheck, t: "CSR Compliant", d: "Trusted partner of leading corporates" },
+  { icon: ShieldCheck, title: "NITI Aayog Verified", desc: "Registered under NGO Darpan with government-recognized compliance." },
+  { icon: Award, title: "80G & 12A Certified", desc: "Eligible for tax-exempt donations under Indian regulations." },
+  { icon: FileText, title: "Annual Reports", desc: "Financial reports and impact summaries published regularly." },
+  { icon: BadgeCheck, title: "CSR Ready", desc: "Structured for partnerships with corporate CSR initiatives." },
+];
+
+const allocations = [
+  { label: "Healthcare & Hygiene", value: "40%", width: "w-[40%]", color: "bg-orange-500" },
+  { label: "Education Programs", value: "30%", width: "w-[30%]", color: "bg-pink-500" },
+  { label: "Workshops & Outreach", value: "20%", width: "w-[20%]", color: "bg-amber-400" },
+  { label: "Operational Support", value: "10%", width: "w-[10%]", color: "bg-violet-500" },
+];
+
+const reports = [
+  { title: "Annual Impact Report 2024", size: "PDF · 12MB" },
+  { title: "Menstrual Awareness Campaign", size: "PDF · 8MB" },
+  { title: "Volunteer & Outreach Overview", size: "PDF · 6MB" },
 ];
 
 export function Transparency() {
   return (
-    <section className="py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-5">
-        <div className="grid items-center gap-12 md:grid-cols-2">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Trust & Transparency</div>
-            <h2 className="mt-3 text-balance text-3xl font-bold md:text-5xl">
-              Built on accountability you can verify
-            </h2>
-            <p className="mt-5 max-w-md text-muted-foreground">
-              Every donation is traceable. Every program is reported. Every rupee is audited. Our
-              commitment to transparency is what allows us to keep growing impact.
-            </p>
-            <a href="#contact" className="mt-7 inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold hover:border-primary hover:text-primary">
-              Download annual report
-            </a>
+    <section className="relative overflow-hidden bg-background py-24">
+      <div className="relative mx-auto max-w-7xl px-5">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Trust & Transparency</span>
+          <h2 className="mt-5 text-4xl md:text-6xl font-black tracking-tight">Built on accountability, <span className="text-primary">measurable impact.</span></h2>
+        </motion.div>
+
+        <div className="mt-20 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="space-y-6">
+            <div className="grid gap-5 sm:grid-cols-2">
+              {items.map((item, i) => (
+                <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="rounded-3xl border border-border bg-secondary/40 p-7">
+                  <item.icon className="h-6 w-6 text-primary mb-4" />
+                  <h3 className="font-bold">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-2">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+            
+            <div className="rounded-[2rem] border border-border bg-secondary/40 p-8">
+              <h3 className="font-black text-xl mb-6">Fund Allocation</h3>
+              {allocations.map((a) => (
+                <div key={a.label} className="mb-4">
+                  <div className="flex justify-between text-sm mb-2"><span>{a.label}</span><span className="font-bold text-primary">{a.value}</span></div>
+                  <div className="h-3 rounded-full bg-muted overflow-hidden">
+                    <motion.div initial={{ width: 0 }} whileInView={{ width: a.value }} className={`h-full ${a.color}`} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {items.map((i, idx) => (
-              <motion.div
-                key={i.t}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.07 }}
-                className="rounded-2xl border border-border bg-card p-5"
-              >
-                <i.icon className="h-7 w-7 text-primary" />
-                <div className="mt-3 text-sm font-semibold">{i.t}</div>
-                <div className="mt-1 text-xs text-muted-foreground">{i.d}</div>
-              </motion.div>
-            ))}
-          </div>
+
+          <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} className="rounded-[2rem] border border-border bg-secondary/40 p-8">
+            <h3 className="text-3xl font-black mb-8">Public resources</h3>
+            <div className="space-y-4">
+              {reports.map((r, i) => (
+                <div key={r.title} className="flex items-center justify-between p-5 rounded-2xl border bg-background/50 hover:border-primary/50 transition">
+                  <div><div className="font-semibold">{r.title}</div><div className="text-xs text-muted-foreground">{r.size}</div></div>
+                  <button className="p-3 rounded-full bg-primary/10 text-primary"><Download size={18} /></button>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
